@@ -1,11 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { SavingsGoal, CalculationResult } from './types';
 import { CURRENCIES, APP_GRADIENT } from './constants';
-import Header from './components/Header';
-import CalculatorForm from './components/CalculatorForm';
-import ResultsDisplay from './components/ResultsDisplay';
-import MonzoSection from './components/MonzoSection';
+import Header from './Header';
+import CalculatorForm from './CalculatorForm';
+import ResultsDisplay from './ResultsDisplay';
+import MonzoSection from './MonzoSection';
 import { GoogleGenAI } from "@google/genai";
 
 const App: React.FC = () => {
@@ -24,7 +23,6 @@ const App: React.FC = () => {
   const fetchAiTip = async (goalName: string, dailyAmount: string) => {
     setIsAiLoading(true);
     try {
-      // Direct use of process.env.API_KEY as per guidelines
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -67,18 +65,15 @@ const App: React.FC = () => {
 
     const formattedDaily = `${goal.currency.symbol}${daily.toFixed(2)}`;
 
-    // Set numeric results immediately
     setResult({
       daysRemaining: diffDays,
       dailyAmount: daily,
       weeklyAmount: weekly,
       monthlyAmount: monthly,
-      aiTip: undefined // Will be filled by fetchAiTip
+      aiTip: undefined 
     });
 
     setIsCalculating(false);
-
-    // Fetch the AI tip in the background
     fetchAiTip(goal.name, formattedDaily);
   };
 
@@ -86,7 +81,7 @@ const App: React.FC = () => {
     if (result && resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, [result?.daysRemaining]); // Only scroll when basic results are first calculated
+  }, [result?.daysRemaining]);
 
   return (
     <div className={`min-h-screen ${APP_GRADIENT} py-8 px-4 flex flex-col items-center`}>
